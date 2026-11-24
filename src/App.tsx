@@ -1,37 +1,613 @@
-import { useEffect, useState } from 'react'
-import type { FormEvent } from 'react'
-import './App.css'
-import { nextAffirmation } from './affirmations'
+import { useEffect, useState } from "react";
+import type { FormEvent } from "react";
+import "./App.css";
+import { nextAffirmation } from "./affirmations";
+import { submitLetter } from "./api";
+import { usePendingLetter } from "./usePendingLetter";
 
-type Route = '/video' | '/letters' | '/cookie' | '/resources' | '/cosca'
+type Route = "/video" | "/letters" | "/cookie" | "/resources" | "/cosca";
 const routes: { path: Route; label: string; number: string }[] = [
-  { path: '/video', label: 'Welcome video', number: '01' }, { path: '/letters', label: 'Letters of hope', number: '02' },
-  { path: '/cookie', label: 'CSG Bot cookie', number: '03' }, { path: '/resources', label: 'Resources', number: '04' },
-  { path: '/cosca', label: 'COSCA donation drive', number: '05' },
-]
+  { path: "/video", label: "Welcome video", number: "01" },
+  { path: "/letters", label: "Letters of hope", number: "02" },
+  { path: "/cookie", label: "CSG Bot cookie", number: "03" },
+  { path: "/resources", label: "Resources", number: "04" },
+  { path: "/cosca", label: "COSCA donation drive", number: "05" },
+];
 const letters = [
-  { author: 'A fellow Lasallian', date: 'Today', text: 'You do not have to have it all figured out today. Showing up is already a brave thing.' },
-  { author: 'Someone from Taft', date: 'Yesterday', text: 'Rest is not a reward you earn after being productive. You are allowed to pause now.' },
-  { author: 'A friend you have not met yet', date: 'Oct 28', text: 'The hard chapter is not the whole story. Please give tomorrow a chance to surprise you.' },
-]
-function navigate(path: Route) { window.history.pushState({}, '', path); window.dispatchEvent(new PopStateEvent('popstate')) }
-function getRoute(): Route { const pathname = window.location.pathname; return routes.some((route) => route.path === pathname) ? pathname as Route : '/video' }
+  {
+    author: "A fellow Lasallian",
+    date: "Today",
+    text: "You do not have to have it all figured out today. Showing up is already a brave thing.",
+  },
+  {
+    author: "Someone from Taft",
+    date: "Yesterday",
+    text: "Rest is not a reward you earn after being productive. You are allowed to pause now.",
+  },
+  {
+    author: "A friend you have not met yet",
+    date: "Oct 28",
+    text: "The hard chapter is not the whole story. Please give tomorrow a chance to surprise you.",
+  },
+];
+function navigate(path: Route) {
+  window.history.pushState({}, "", path);
+  window.dispatchEvent(new PopStateEvent("popstate"));
+}
+function getRoute(): Route {
+  const pathname = window.location.pathname;
+  return routes.some((route) => route.path === pathname)
+    ? (pathname as Route)
+    : "/video";
+}
 function App() {
-  const [path, setPath] = useState<Route>(getRoute)
-  useEffect(() => { const handlePopState = () => setPath(getRoute()); window.addEventListener('popstate', handlePopState); return () => window.removeEventListener('popstate', handlePopState) }, [])
+  const [path, setPath] = useState<Route>(getRoute);
+  useEffect(() => {
+    const handlePopState = () => setPath(getRoute());
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   return (
-    <div className="app-shell"><header className="site-header"><a className="brand-mark" href="/video" onClick={(event) => { event.preventDefault(); navigate('/video') }} aria-label="CSG home"><span className="brand-dot">+</span><span>CSG / <b>wellbeing</b></span></a><span className="header-note">a little space to breathe</span></header><main><section className="intro" aria-label="You are not null: you exist, you are defined, you are not empty"><div className="eyebrow"><span className="eyebrow-line" /> COMPUTER STUDIES GOVERNMENT <span className="eyebrow-line" /></div><h1>you != null</h1><p>(You exist, you are defined, you are not empty)</p></section><nav className="tab-nav" aria-label="Wellbeing spaces">{routes.map((route) => <a key={route.path} href={route.path} className={path === route.path ? 'tab active' : 'tab'} onClick={(event) => { event.preventDefault(); navigate(route.path) }}><span className="tab-number">{route.number}</span>{route.label}<span className="tab-arrow" aria-hidden="true">↗</span></a>)}</nav><div className="page-content">{path === '/video' && <VideoPage />}{path === '/letters' && <LettersPage />}{path === '/cookie' && <CookiePage />}{path === '/resources' && <ResourcesPage />}{path === '/cosca' && <CoscaPage />}</div></main><footer className="site-footer"><div><span className="footer-label">NEED A HUMAN?</span><a href="/resources" onClick={(event) => { event.preventDefault(); navigate('/resources') }}>OCCS & crisis contacts <span aria-hidden="true">↗</span></a></div><p>This site is an empathetic support space and is not a substitute for professional mental health care or medical advice.</p></footer></div>
-  )
+    <div className="app-shell">
+      <header className="site-header">
+        <a
+          className="brand-mark"
+          href="/video"
+          onClick={(event) => {
+            event.preventDefault();
+            navigate("/video");
+          }}
+          aria-label="CSG home"
+        >
+          <span className="brand-dot">+</span>
+          <span>
+            CSG / <b>wellbeing</b>
+          </span>
+        </a>
+        <span className="header-note">a little space to breathe</span>
+      </header>
+      <main>
+        <section
+          className="intro"
+          aria-label="You are not null: you exist, you are defined, you are not empty"
+        >
+          <div className="eyebrow">
+            <span className="eyebrow-line" /> COMPUTER STUDIES GOVERNMENT{" "}
+            <span className="eyebrow-line" />
+          </div>
+          <h1>you != null</h1>
+          <p>(You exist, you are defined, you are not empty)</p>
+        </section>
+        <nav className="tab-nav" aria-label="Wellbeing spaces">
+          {routes.map((route) => (
+            <a
+              key={route.path}
+              href={route.path}
+              className={path === route.path ? "tab active" : "tab"}
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(route.path);
+              }}
+            >
+              <span className="tab-number">{route.number}</span>
+              {route.label}
+              <span className="tab-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          ))}
+        </nav>
+        <div className="page-content">
+          {path === "/video" && <VideoPage />}
+          {path === "/letters" && <LettersPage />}
+          {path === "/cookie" && <CookiePage />}
+          {path === "/resources" && <ResourcesPage />}
+          {path === "/cosca" && <CoscaPage />}
+        </div>
+      </main>
+      <footer className="site-footer">
+        <div>
+          <span className="footer-label">NEED A HUMAN?</span>
+          <a
+            href="/resources"
+            onClick={(event) => {
+              event.preventDefault();
+              navigate("/resources");
+            }}
+          >
+            OCCS & crisis contacts <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <p>
+          This site is an empathetic support space and is not a substitute for
+          professional mental health care or medical advice.
+        </p>
+      </footer>
+    </div>
+  );
 }
 
-function VideoPage() { return <section className="content-grid video-grid"><div className="section-copy"><span className="section-kicker">01 / A MESSAGE FROM YOUR CSG</span><h2>You matter here.</h2><p className="lede">A few familiar faces wanted to leave you a note. Take a moment with them, exactly as you are.</p><div className="video-meta"><span className="status-dot" /> 02:14 / CSG OFFICERS</div></div><div className="video-frame"><video controls poster="/assets/csg-welcome-poster.svg"><source src="/assets/csg-welcome.mp4" type="video/mp4" /><track kind="captions" src="/assets/csg-welcome.vtt" srcLang="en" label="English captions" default />Your browser does not support HTML5 video.</video><div className="video-caption">A welcome from the people in your corner.</div></div></section> }
-function LettersPage() { const [email, setEmail] = useState(''); const [message, setMessage] = useState(''); const [notice, setNotice] = useState(''); const [crisisOpen, setCrisisOpen] = useState(false); const submit = (event: FormEvent) => { event.preventDefault(); const normalized = message.toLowerCase().replace(/[0-9]/g, (digit) => ({ '1': 'i', '3': 'e', '4': 'a', '5': 's', '0': 'o' }[digit] || digit)); const severeTerms = ['suicide', 'kill myself', 'end my life', 'want to die', 'magpakamatay', 'ayoko nang mabuhay']; if (!email.endsWith('@dlsu.edu.ph')) { setNotice('Please use your DLSU student email to continue.'); return } if (severeTerms.some((term) => normalized.includes(term))) { setCrisisOpen(true); return } setNotice('Your letter is queued as pending_review. Thank you for adding care to this space.'); setMessage('') }; return <section className="letters-page"><div className="section-heading"><div><span className="section-kicker">02 / ANONYMOUS LETTERS OF HOPE</span><h2>Leave a little light behind.</h2></div><p>Approved notes from students, for students. Read slowly.</p></div><div className="letters-layout"><div className="letter-feed">{letters.map((letter) => <article className="letter-card" key={letter.date}><div className="card-top"><span>✦</span><button type="button" className="report-button" aria-label={`Report letter from ${letter.author}`}>⚑ report</button></div><p>{letter.text}</p><footer><span>{letter.author}</span><time>{letter.date}</time></footer></article>)}</div><form className="hope-form" onSubmit={submit}><span className="section-kicker">WRITE A NOTE</span><h3>Someone may need this today.</h3><label htmlFor="student-email">DLSU email <span>*</span></label><input id="student-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@dlsu.edu.ph" required /><label htmlFor="hope-message">Your message <span>*</span></label><textarea id="hope-message" rows={5} value={message} onChange={(event) => setMessage(event.target.value)} placeholder="A gentle thought for someone else..." required /><p className="form-hint">Your note is checked for safety, then reviewed before it joins the feed.</p><button className="primary-button" type="submit">Send with care <span aria-hidden="true">→</span></button>{notice && <p className="form-notice" role="status">{notice}</p>}</form></div>{crisisOpen && <CrisisModal onClose={() => setCrisisOpen(false)} />}</section> }
-function CrisisModal({ onClose }: { onClose: () => void }) { return <div className="modal-backdrop" role="presentation"><div className="crisis-modal" role="dialog" aria-modal="true" aria-labelledby="crisis-title"><button className="modal-close" onClick={onClose} aria-label="Close crisis resources">×</button><span className="section-kicker">YOU DESERVE SUPPORT NOW</span><h2 id="crisis-title">You do not have to carry this alone.</h2><p>If you may hurt yourself or are in immediate danger, contact emergency services or a trusted person now. OCCS can help you find the next step.</p><a className="primary-button" href="tel:1553">Call NCMH · 1553</a><a className="modal-link" href="mailto:occs@dlsu.edu.ph">Email OCCS ↗</a></div></div> }
-function BotMascot({ bounce }: { bounce: boolean }) { return <div className={bounce ? 'bot-wrap bot-bounce' : 'bot-wrap'}><img className="mascot-image" src="/assets/sticker.webp" alt="CSG Bot, a friendly light-blue robot holding a cookie with a duck on its head" /></div> }
-function CookiePage() { const [note, setNote] = useState(''); const open = note !== ''; const openCookie = () => setNote(nextAffirmation()); return <section className="cookie-page"><div className="cookie-copy"><span className="section-kicker">03 / YOUR CSG BOT</span><span className="cookie-sticker">tiny care delivery</span><h2>A little treat for your brain.</h2><p className="lede">The CSG Bot has a kind reminder ready for you. Tap the heart whenever you need a small reset.</p><div className="speech-bubble" aria-live="polite">{open ? note : 'your note is waiting'}</div><span className="cookie-hint">one tap = one little reminder</span></div><div className="mascot-stage"><span className="stage-spark spark-two">+</span><BotMascot bounce={open} /><button className={open ? 'cookie cookie-open' : 'cookie'} onClick={openCookie} aria-label="Open a kind reminder"><span>♥</span><small>{open ? 'again' : 'tap me'}</small></button></div></section> }
-function ResourcesPage() { return <section className="resources-page"><div className="section-heading"><div><span className="section-kicker">04 / OFFICIAL SUPPORT</span><h2>People who can help.</h2></div><p>Save this page. You can reach out before things feel urgent, too.</p></div><div className="resource-table"><div className="resource-row resource-head"><span>CONTACT</span><span>DETAILS</span></div><div className="resource-row"><strong>CPS Main Office</strong><span>Room 203, 2/F Br. Connon Hall<br />Mon–Fri: 7:30 AM–9:00 PM · Sat: 8:00 AM–5:00 PM<br />Local 419 · Direct <a href="tel:85360226">8536-0226</a></span></div><div className="resource-row"><strong>CPS Satellite Office</strong><span>2/F Enrique Razon Sports Center (front of elevator)<br />Mon–Fri: 8:00 AM–5:00 PM<br />Landline TBA</span></div><div className="resource-row"><strong>CPS Academy Office (SHS)</strong><span>2/F Enrique Razon Sports Center (front of stairs)<br />Mon–Fri: 7:30 AM–5:00 PM<br />Landline TBA</span></div><div className="resource-row"><strong>CPS mobile</strong><span>Globe <a href="tel:09541985940">0954-198-5940</a> · Smart <a href="tel:09686488029">0968-648-8029</a></span></div><div className="resource-row"><strong>Undergraduate students</strong><span><a href="tel:09284546489">0928-454-6489</a> / <a href="tel:09052216924">0905-221-6924</a></span></div><div className="resource-row"><strong>Graduate students</strong><span><a href="tel:09610965358">0961-096-5358</a></span></div><div className="resource-row"><strong>Laguna campus</strong><span><a href="tel:09517731991">0951-773-1991</a></span></div><div className="resource-row"><strong>College of Law · Rufino</strong><span><a href="tel:09984437809">0998-443-7809</a></span></div><div className="resource-row"><strong>CPS inquiries and appointments</strong><span><a href="mailto:cps@dlsu.edu.ph">cps@dlsu.edu.ph</a></span></div><div className="resource-row"><strong>CPS SAS1000 concerns</strong><span><a href="mailto:cps.sas1000@dlsu.edu.ph">cps.sas1000@dlsu.edu.ph</a></span></div><div className="resource-row"><strong>CPS peer student care</strong><span><a href="mailto:cps.studentcare@dlsu.edu.ph">cps.studentcare@dlsu.edu.ph</a></span></div><div className="resource-row"><strong>CPS feedback and suggestions</strong><span><a href="mailto:cpsdir@dlsu.edu.ph">cpsdir@dlsu.edu.ph</a></span></div><div className="resource-row"><strong>Student Success Center</strong><span>Internships, MOAs, SAS2000/3000 · <a href="mailto:ssc@dlsu.edu.ph">ssc@dlsu.edu.ph</a></span></div></div><div className="crisis-strip"><div><span className="section-kicker">NATIONAL CRISIS HOTLINES</span><h3>Immediate support is available.</h3></div><div className="crisis-links"><a href="tel:09175584673">Hopeline PH <b>0917-558-4673</b></a><a href="tel:1553">NCMH Hotline <b>1553</b></a><span>In Touch Community Services <a href="tel:0288937603"><b>02-8893-7603</b></a> · <a href="tel:09190560709">0919-056-0709</a> · <a href="tel:09178001123">0917-800-1123</a> · <a href="tel:09171085412">0917-108-5412</a></span></div></div></section> }
+function VideoPage() {
+  return (
+    <section className="content-grid video-grid">
+      <div className="section-copy">
+        <span className="section-kicker">01 / A MESSAGE FROM YOUR CSG</span>
+        <h2>You matter here.</h2>
+        <p className="lede">
+          A few familiar faces wanted to leave you a note. Take a moment with
+          them, exactly as you are.
+        </p>
+        <div className="video-meta">
+          <span className="status-dot" /> 02:14 / CSG OFFICERS
+        </div>
+      </div>
+      <div className="video-frame">
+        <video controls poster="/assets/csg-welcome-poster.svg">
+          <source src="/assets/csg-welcome.mp4" type="video/mp4" />
+          <track
+            kind="captions"
+            src="/assets/csg-welcome.vtt"
+            srcLang="en"
+            label="English captions"
+            default
+          />
+          Your browser does not support HTML5 video.
+        </video>
+        <div className="video-caption">
+          A welcome from the people in your corner.
+        </div>
+      </div>
+    </section>
+  );
+}
+function LettersPage() {
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [notice, setNotice] = useState("");
+  const [sending, setSending] = useState(false);
+  const [crisisOpen, setCrisisOpen] = useState(false);
+  const { pending, mark, clear } = usePendingLetter();
 
-function CoscaPage() { return <section className="cosca-page"><div className="cosca-intro"><span className="section-kicker">05 / COSCA COMMUNITY DRIVE</span><h2>Support the cause.</h2><p className="lede">The official COSCA publication will live here. Add the campaign artwork when it is ready.</p></div><article className="publication-frame" id="campaign-details"><div className="publication-label"><span>COSCA × CSG</span><span>PUBLICATION MATERIAL</span></div><div className="publication-placeholder"><span className="placeholder-mark">+</span><h3>COSCA publication</h3><p>Insert the official donation-drive material here.</p></div></article></section> }
+  const submit = async (event: FormEvent) => {
+    event.preventDefault();
+    if (sending) return;
+    const cleanEmail = email.trim().toLowerCase();
+    const normalized = message
+      .toLowerCase()
+      .replace(
+        /[0-9]/g,
+        (digit) =>
+          ({ "1": "i", "3": "e", "4": "a", "5": "s", "0": "o" })[digit] ||
+          digit,
+      );
+    const severeTerms = [
+      "suicide",
+      "kill myself",
+      "end my life",
+      "want to die",
+      "magpakamatay",
+      "ayoko nang mabuhay",
+    ];
+    if (!cleanEmail.endsWith("@dlsu.edu.ph")) {
+      setNotice("Please use your DLSU student email to continue.");
+      return;
+    }
+    if (severeTerms.some((term) => normalized.includes(term))) {
+      setCrisisOpen(true);
+      return;
+    }
+    setSending(true);
+    setNotice("");
+    try {
+      const minDelay = new Promise((resolve) => setTimeout(resolve, 1400));
+      const [{ id }] = await Promise.all([
+        submitLetter(cleanEmail, message.trim()),
+        minDelay,
+      ]);
+      mark(id);
+      setMessage("");
+      setEmail("");
+    } catch {
+      setNotice(
+        "Something went wrong sending your note. Your message is still here, please try again.",
+      );
+    } finally {
+      setSending(false);
+    }
+  };
 
-export default App
+  return (
+    <section className="letters-page">
+      <div className="section-heading">
+        <div>
+          <span className="section-kicker">02 / ANONYMOUS LETTERS OF HOPE</span>
+          <h2>Leave a little light behind.</h2>
+        </div>
+        <p>Approved notes from students, for students. Read slowly.</p>
+      </div>
+      <div className="letters-layout">
+        <div className="letter-feed">
+          {letters.map((letter) => (
+            <article className="letter-card" key={letter.date}>
+              <div className="card-top">
+                <span>✦</span>
+                <button
+                  type="button"
+                  className="report-button"
+                  aria-label={`Report letter from ${letter.author}`}
+                >
+                  ⚑ report
+                </button>
+              </div>
+              <p>{letter.text}</p>
+              <footer>
+                <span>{letter.author}</span>
+                <time>{letter.date}</time>
+              </footer>
+            </article>
+          ))}
+        </div>
+        {pending ? (
+          <LetterReceived
+            submittedAt={pending.submittedAt}
+            onWriteAnother={clear}
+          />
+        ) : (
+          <form className="hope-form" onSubmit={submit}>
+            {sending && <SendingOverlay />}
+            <span className="section-kicker">WRITE A NOTE</span>
+            <h3>Someone may need this today.</h3>
+            <label htmlFor="student-email">
+              DLSU email <span>*</span>
+            </label>
+            <input
+              id="student-email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              placeholder="you@dlsu.edu.ph"
+              required
+            />
+            <label htmlFor="hope-message">
+              Your message <span>*</span>
+            </label>
+            <textarea
+              id="hope-message"
+              rows={5}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              placeholder="A gentle thought for someone else..."
+              required
+            />
+            <p className="form-hint">
+              Your note is checked for safety, then reviewed before it joins the
+              feed.
+            </p>
+            <button className="primary-button" type="submit" disabled={sending}>
+              {sending ? "Sending..." : "Send with care"}{" "}
+              <span aria-hidden="true">→</span>
+            </button>
+            {notice && (
+              <p className="form-notice" role="status">
+                {notice}
+              </p>
+            )}
+          </form>
+        )}
+      </div>
+      {crisisOpen && <CrisisModal onClose={() => setCrisisOpen(false)} />}
+    </section>
+  );
+}
+
+function LetterReceived({
+  submittedAt,
+  onWriteAnother,
+}: {
+  submittedAt: number;
+  onWriteAnother: () => void;
+}) {
+  const when = new Date(submittedAt).toLocaleString("en-PH", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+  return (
+    <div className="hope-form letter-received" role="status">
+      <span className="section-kicker">RECEIVED</span>
+      <h3>Your message is currently being checked!</h3>
+      <p className="form-hint">
+        Thank you for adding care to this space. Every note is checked for
+        safety before it joins the feed, so it may take a little while to
+        appear.
+      </p>
+      <p className="form-hint">Sent {when}</p>
+      <button type="button" className="primary-button" onClick={onWriteAnother}>
+        Write another note <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  );
+}
+
+const sendingLines = [
+  "Folding your note...",
+  "Sealing it with care...",
+  "Sending it off...",
+];
+
+function SendingOverlay() {
+  const [line, setLine] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(
+      () => setLine((n) => Math.min(n + 1, sendingLines.length - 1)),
+      550,
+    );
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div className="sending-overlay" role="status" aria-live="polite">
+      <svg
+        className="paper-plane"
+        viewBox="0 0 64 64"
+        width="64"
+        height="64"
+        aria-hidden="true"
+      >
+        <path
+          d="M4 30 L60 6 L44 58 L31 38 Z M31 38 L60 6"
+          fill="none"
+          stroke="#91dbd0"
+          strokeWidth="3"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="sending-trail" aria-hidden="true" />
+      <p>{sendingLines[line]}</p>
+    </div>
+  );
+}
+
+function CrisisModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="modal-backdrop" role="presentation">
+      <div
+        className="crisis-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="crisis-title"
+      >
+        <button
+          className="modal-close"
+          onClick={onClose}
+          aria-label="Close crisis resources"
+        >
+          ×
+        </button>
+        <span className="section-kicker">YOU DESERVE SUPPORT NOW</span>
+        <h2 id="crisis-title">You do not have to carry this alone.</h2>
+        <p>
+          If you may hurt yourself or are in immediate danger, contact emergency
+          services or a trusted person now. OCCS can help you find the next
+          step.
+        </p>
+        <a className="primary-button" href="tel:1553">
+          Call NCMH · 1553
+        </a>
+        <a className="modal-link" href="mailto:occs@dlsu.edu.ph">
+          Email OCCS ↗
+        </a>
+      </div>
+    </div>
+  );
+}
+function BotMascot({ bounce }: { bounce: boolean }) {
+  return (
+    <div className={bounce ? "bot-wrap bot-bounce" : "bot-wrap"}>
+      <img
+        className="mascot-image"
+        src="/assets/sticker.webp"
+        alt="CSG Bot, a friendly light-blue robot holding a cookie with a duck on its head"
+      />
+    </div>
+  );
+}
+function CookiePage() {
+  const [note, setNote] = useState("");
+  const open = note !== "";
+  const openCookie = () => setNote(nextAffirmation());
+  return (
+    <section className="cookie-page">
+      <div className="cookie-copy">
+        <span className="section-kicker">03 / YOUR CSG BOT</span>
+        <span className="cookie-sticker">tiny care delivery</span>
+        <h2>A little treat for your brain.</h2>
+        <p className="lede">
+          The CSG Bot has a kind reminder ready for you. Tap the heart whenever
+          you need a small reset.
+        </p>
+        <div className="speech-bubble" aria-live="polite">
+          {open ? note : "your note is waiting"}
+        </div>
+        <span className="cookie-hint">one tap = one little reminder</span>
+      </div>
+      <div className="mascot-stage">
+        <span className="stage-spark spark-two">+</span>
+        <BotMascot bounce={open} />
+        <button
+          className={open ? "cookie cookie-open" : "cookie"}
+          onClick={openCookie}
+          aria-label="Open a kind reminder"
+        >
+          <span>♥</span>
+          <small>{open ? "again" : "tap me"}</small>
+        </button>
+      </div>
+    </section>
+  );
+}
+function ResourcesPage() {
+  return (
+    <section className="resources-page">
+      <div className="section-heading">
+        <div>
+          <span className="section-kicker">04 / OFFICIAL SUPPORT</span>
+          <h2>People who can help.</h2>
+        </div>
+        <p>Save this page. You can reach out before things feel urgent, too.</p>
+      </div>
+      <div className="resource-table">
+        <div className="resource-row resource-head">
+          <span>CONTACT</span>
+          <span>DETAILS</span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS Main Office</strong>
+          <span>
+            Room 203, 2/F Br. Connon Hall
+            <br />
+            Mon–Fri: 7:30 AM–9:00 PM · Sat: 8:00 AM–5:00 PM
+            <br />
+            Local 419 · Direct <a href="tel:85360226">8536-0226</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS Satellite Office</strong>
+          <span>
+            2/F Enrique Razon Sports Center (front of elevator)
+            <br />
+            Mon–Fri: 8:00 AM–5:00 PM
+            <br />
+            Landline TBA
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS Academy Office (SHS)</strong>
+          <span>
+            2/F Enrique Razon Sports Center (front of stairs)
+            <br />
+            Mon–Fri: 7:30 AM–5:00 PM
+            <br />
+            Landline TBA
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS mobile</strong>
+          <span>
+            Globe <a href="tel:09541985940">0954-198-5940</a> · Smart{" "}
+            <a href="tel:09686488029">0968-648-8029</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>Undergraduate students</strong>
+          <span>
+            <a href="tel:09284546489">0928-454-6489</a> /{" "}
+            <a href="tel:09052216924">0905-221-6924</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>Graduate students</strong>
+          <span>
+            <a href="tel:09610965358">0961-096-5358</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>Laguna campus</strong>
+          <span>
+            <a href="tel:09517731991">0951-773-1991</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>College of Law · Rufino</strong>
+          <span>
+            <a href="tel:09984437809">0998-443-7809</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS inquiries and appointments</strong>
+          <span>
+            <a href="mailto:cps@dlsu.edu.ph">cps@dlsu.edu.ph</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS SAS1000 concerns</strong>
+          <span>
+            <a href="mailto:cps.sas1000@dlsu.edu.ph">cps.sas1000@dlsu.edu.ph</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS peer student care</strong>
+          <span>
+            <a href="mailto:cps.studentcare@dlsu.edu.ph">
+              cps.studentcare@dlsu.edu.ph
+            </a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>CPS feedback and suggestions</strong>
+          <span>
+            <a href="mailto:cpsdir@dlsu.edu.ph">cpsdir@dlsu.edu.ph</a>
+          </span>
+        </div>
+        <div className="resource-row">
+          <strong>Student Success Center</strong>
+          <span>
+            Internships, MOAs, SAS2000/3000 ·{" "}
+            <a href="mailto:ssc@dlsu.edu.ph">ssc@dlsu.edu.ph</a>
+          </span>
+        </div>
+      </div>
+      <div className="crisis-strip">
+        <div>
+          <span className="section-kicker">NATIONAL CRISIS HOTLINES</span>
+          <h3>Immediate support is available.</h3>
+        </div>
+        <div className="crisis-links">
+          <a href="tel:09175584673">
+            Hopeline PH <b>0917-558-4673</b>
+          </a>
+          <a href="tel:1553">
+            NCMH Hotline <b>1553</b>
+          </a>
+          <span>
+            In Touch Community Services{" "}
+            <a href="tel:0288937603">
+              <b>02-8893-7603</b>
+            </a>{" "}
+            · <a href="tel:09190560709">0919-056-0709</a> ·{" "}
+            <a href="tel:09178001123">0917-800-1123</a> ·{" "}
+            <a href="tel:09171085412">0917-108-5412</a>
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function CoscaPage() {
+  return (
+    <section className="cosca-page">
+      <div className="cosca-intro">
+        <span className="section-kicker">05 / COSCA COMMUNITY DRIVE</span>
+        <h2>Support the cause.</h2>
+        <p className="lede">
+          The official COSCA publication will live here. Add the campaign
+          artwork when it is ready.
+        </p>
+      </div>
+      <article className="publication-frame" id="campaign-details">
+        <div className="publication-label">
+          <span>COSCA × CSG</span>
+          <span>PUBLICATION MATERIAL</span>
+        </div>
+        <div className="publication-placeholder">
+          <span className="placeholder-mark">+</span>
+          <h3>COSCA publication</h3>
+          <p>Insert the official donation-drive material here.</p>
+        </div>
+      </article>
+    </section>
+  );
+}
+
+export default App;
