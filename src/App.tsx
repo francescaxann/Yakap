@@ -508,7 +508,7 @@ function ResourcesPage() {
         <div className="resource-row">
           <strong>Graduate students</strong>
           <span>
-            <a href="tel:09610965458">0961-096-5458</a>
+            <a href="tel:09610965358">0961-096-5358</a>
           </span>
         </div>
         <div className="resource-row">
