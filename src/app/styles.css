@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  :root {
+    --background: 239 249 252;
+    --foreground: 23 54 75;
+    --primary: 145 219 208;
+    --secondary: 198 231 242;
+    --muted: 223 240 248;
+    --muted-foreground: 54 88 104;
+    --border: 172 209 223;
+    --input: 81 119 135;
+    --ring: 22 75 104;
+    --destructive: 251 225 229;
+    --destructive-foreground: 134 42 67;
+    --link: 23 92 119;
+  }
+
+  :where(a, button, input, textarea, select, video, [tabindex]):focus-visible {
+    @apply outline outline-[3px] outline-offset-2 outline-ring ring-2 ring-white;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      @apply !animate-none !transition-none !scroll-auto;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :where(a, button, input, textarea, select, video, [tabindex]):focus-visible {
+      @apply outline-[Highlight];
+    }
+
+    button {
+      @apply border border-[ButtonText];
+    }
+  }
+}
