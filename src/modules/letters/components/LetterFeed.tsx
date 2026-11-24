@@ -12,6 +12,23 @@ type Letters = LetterFeedPayload['letters']
 type Feed = { status: 'loading' | 'error' } | { status: 'loaded'; letters: Letters }
 const cardLayout = 'flex min-h-[180px] flex-col justify-between p-5 desktop:min-h-60'
 
+function LetterCardSkeleton() {
+  return (
+    <Card className={cardLayout} variant="letter" aria-hidden="true">
+      <CardHeader><Skeleton className="size-4" /></CardHeader>
+      <CardContent className="my-6 flex flex-col gap-2.5">
+        <Skeleton className="h-3 w-full" />
+        <Skeleton className="h-3 w-11/12" />
+        <Skeleton className="h-3 w-3/5" />
+      </CardContent>
+      <CardFooter className="justify-between">
+        <Skeleton className="h-2.5 w-2/5" />
+        <Skeleton className="h-2.5 w-1/3" />
+      </CardFooter>
+    </Card>
+  )
+}
+
 export function LetterFeed() {
   const [feed, setFeed] = useState<Feed>({ status: 'loading' })
 
@@ -42,20 +59,7 @@ export function LetterFeed() {
         <EmptyDescription role="status">{message}</EmptyDescription>
       </Empty>
       <div className="grid items-start gap-3.5 desktop:grid-cols-3 desktop:[&>*:nth-child(2)]:mt-8 [&>*:nth-child(2)]:bg-secondary desktop:[&>*:nth-child(3)]:mt-3 [&>*:nth-child(3)]:bg-background" aria-busy={feed.status === 'loading'}>
-        {feed.status === 'loading' && [1, 2, 3].map((card) => (
-          <Card className={cardLayout} variant="letter" key={card} aria-hidden="true">
-            <Skeleton className="size-4" />
-            <div className="flex flex-col gap-3">
-              <Skeleton className="h-3 w-full" />
-              <Skeleton className="h-3 w-11/12" />
-              <Skeleton className="h-3 w-2/3" />
-            </div>
-            <div className="flex justify-between gap-3">
-              <Skeleton className="h-2 w-2/5" />
-              <Skeleton className="h-2 w-1/3" />
-            </div>
-          </Card>
-        ))}
+        {feed.status === 'loading' && [1, 2, 3].map((card) => <LetterCardSkeleton key={card} />)}
         {letters.map((letter) => (
           <Card asChild className={cardLayout} variant="letter" key={letter.id}>
             <article>

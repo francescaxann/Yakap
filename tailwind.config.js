@@ -15,11 +15,18 @@ export default {
           '100%': { transform: 'rotate(-4deg)' },
         },
         twinkle: { '50%': { transform: 'translateY(-5px) rotate(12deg) scale(1.12)' } },
+        'confirmation-overlay': { from: { opacity: '0' }, to: { opacity: '1' } },
+        'confirmation-enter': {
+          from: { opacity: '0', transform: 'translate(-50%, calc(-50% + 0.375rem)) scale(0.97)' },
+          to: { opacity: '1', transform: 'translate(-50%, -50%) scale(1)' },
+        },
       },
       animation: {
         'bot-bounce': 'bot-bounce .7s ease-in-out 2',
         'cookie-pop': 'cookie-pop .55s ease-out',
         twinkle: 'twinkle 1.8s ease-in-out .6s 2',
+        'confirmation-overlay': 'confirmation-overlay 150ms ease-out',
+        'confirmation-enter': 'confirmation-enter 180ms ease-out',
       },
       colors: {
         background: 'rgb(var(--background) / <alpha-value>)',
