@@ -28,6 +28,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ### Security and verification
 
+- Follow the [OWASP HTTP Headers Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html). Maintain baseline headers in `next.config.ts` and the request-specific CSP in `src/proxy.ts`. Keep CSP nonces per document, restrict origins and browser capabilities, and verify font, avatar, and shadcn behavior after policy changes. Use HSTS for production HTTPS and prevent caching of sensitive responses.
 - Enforce verified identity and moderator access on the server. Use generic failure messages for unexpected errors and keep credentials and sender data out of logs and committed files.
 - Run app queries through the restricted database role and transaction scopes in `src/shared/database.server.ts`. Derive actor context from verified sessions. Use the direct administrator URL for migrations and test RLS changes with a login that lacks `BYPASSRLS`.
 - List public canonical pages in `src/app/sitemap.ts` and keep the sitemap origin aligned with `BETTER_AUTH_URL`. Mark private pages `noindex` and enforce their authorization on the server.

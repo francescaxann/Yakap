@@ -133,7 +133,7 @@ src/
 drizzle/postgres/              Versioned PostgreSQL migrations
 ```
 
-Yakap runs as one Next.js app. Features group UI in `components/`, server-only work in `server/`, input schemas in `validation/`, and TypeScript contracts in `types/` where needed. Shared modules hold code used across features.
+Yakap runs as one Next.js app. Features group UI in `components/`, server-only work in `server/`, input schemas in `validation/`, and TypeScript contracts in `types/` where needed. Shared modules hold code used across features. Security headers are configured in `next.config.ts`, with the per-document CSP nonce generated in `src/proxy.ts`.
 
 PostgreSQL row-level policies apply inside the app's transactions. Public reads see approved letters, submissions use the verified session's sender identity, and moderator access is checked against database membership. Better Auth uses a separate transaction scope for account and session data. Keep the administrator connection for migrations and use the restricted login for every deployed app instance.
 
@@ -148,5 +148,6 @@ PostgreSQL row-level policies apply inside the app's transactions. Public reads 
 
 - The Computer Studies Government and De La Salle University.
 - [WCAG 2.2](https://www.w3.org/TR/WCAG22/) for accessibility guidance.
+- [OWASP HTTP Headers Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html) for security header guidance.
 
 <p align="right"><a href="#readme-top">Back to top</a></p>
