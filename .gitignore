@@ -1,7 +1,12 @@
 node_modules/
 .next/
+next-env.d.ts
+*.tsbuildinfo
 .env
 .env*.local
 .vercel
 *.log
 .DS_Store
+
+# Local database files
+*.db*

@@ -1,32 +1,67 @@
-# React + TypeScript + Vite
+<p align="right"><a id="readme-top"></a></p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+<div align="center">
+  <img src="public/assets/sticker.webp" alt="Yakap's CSG Bot mascot" width="112">
+  <h1>Yakap</h1>
+  <p>A wellbeing space for De La Salle University students, built for the Computer Studies Government.</p>
+  <a href="https://github.com/francescaxann/Yakap/issues">Report a bug</a>
+  ·
+  <a href="https://github.com/francescaxann/Yakap/issues">Request a feature</a>
+</div>
 
-Currently, two official plugins are available:
+<details>
+  <summary>Table of contents</summary>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [About the Project](#about-the-project)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Acknowledgments](#acknowledgments)
 
-## React Compiler
+</details>
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## About the Project
 
-## Expanding the Oxlint configuration
+Yakap is a wellbeing space by the Computer Studies Government at De La Salle University. It brings together a welcome message, letters of hope, affirmations, campus support contacts, and the COSCA donation drive.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Built With
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- [Next.js App Router](https://nextjs.org/docs/app) and [React](https://react.dev/)
+- [Tailwind CSS](https://tailwindcss.com/) and [shadcn/ui](https://ui.shadcn.com/)
+
+## Getting Started
+
+Use Node.js 24 or later and npm.
+
+```sh
+npm ci
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Open [Yakap on localhost](http://localhost:3000). For a production build, run `npm run build` followed by `npm start`. Set `BETTER_AUTH_URL` to the deployed origin for canonical URLs and the sitemap.
+
+## Usage
+
+| Route | What you can do |
+| --- | --- |
+| `/` or `/video` | View the CSG welcome page |
+| `/letters` | Read the original sample letters |
+| `/cookie` | Open the CSG Bot cookie for a reminder |
+| `/resources` | Find campus support contacts |
+| `/cosca` | View the COSCA donation drive page |
+| `/sitemap.xml` | View the public canonical page URLs |
+
+## Project Structure
+
+- `src/app` owns routes and the shared layout.
+- `src/modules` contains the public content by feature.
+- `src/shared/ui` contains shared shadcn components.
+
+Run `npm run lint` and `npm run build` before submitting changes.
+
+## Acknowledgments
+
+- The Computer Studies Government and De La Salle University.
+- [WCAG 2.2](https://www.w3.org/TR/WCAG22/) for accessibility guidance.
+
+<p align="right"><a href="#readme-top">Back to top</a></p>
