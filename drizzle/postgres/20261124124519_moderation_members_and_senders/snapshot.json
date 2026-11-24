@@ -1,0 +1,190 @@
+{
+  "type": "diff",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "cc05878a-6a93-4b83-b363-9b0fca9f9c90",
+  "prevIds": [
+    "be988a4b-7d60-44bd-9e44-006ef125d605"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "moderators"
+      ],
+      "writes": [
+        "s|tbl|public.moderators",
+        "n|tbl|public.moderators",
+        "e|tbl|public.moderators",
+        "n|rel|public.moderators",
+        "n|type|public.moderators",
+        "n|rel|public.moderators_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "letters",
+        "sender_id"
+      ],
+      "writes": [
+        "s|col|public.letters.sender_id",
+        "n|col|public.letters.sender_id",
+        "e|col|public.letters.sender_id"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "letters",
+        "letters_sender_id_idx"
+      ],
+      "writes": [
+        "s|idx|public.letters_sender_id_idx",
+        "n|idx|public.letters_sender_id_idx",
+        "e|idx|public.letters_sender_id_idx",
+        "n|rel|public.letters_sender_id_idx"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public",
+        "n|col|public.letters.sender_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|fk|public.letters.letters_sender_id_user_id_fkey",
+        "n|fk|public.letters.letters_sender_id_user_id_fkey",
+        "e|fk|public.letters.letters_sender_id_user_id_fkey",
+        "n|con|public.letters.letters_sender_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.letters.sender_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "moderators",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "moderators",
+        "name": "email",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "sender_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "letters_sender_id_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "sender_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "letters_sender_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "sender_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "SET NULL",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "moderators",
+        "name": "moderators_pkey",
+        "columns": [
+          "email"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    }
+  ]
+}

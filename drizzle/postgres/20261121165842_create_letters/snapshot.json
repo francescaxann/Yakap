@@ -1,0 +1,150 @@
+{
+  "type": "base",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "58a54677-202c-48d4-ade7-71139dd09229",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_enum",
+      "statementTarget": [
+        "enum",
+        "public",
+        "letter_status"
+      ],
+      "writes": [
+        "s|enum|public.letter_status",
+        "n|enum|public.letter_status",
+        "e|enum|public.letter_status",
+        "n|type|public.letter_status"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|tbl|public.letters",
+        "n|tbl|public.letters",
+        "e|tbl|public.letters",
+        "n|rel|public.letters",
+        "n|type|public.letters",
+        "n|rel|public.letters_pkey"
+      ],
+      "reads": [
+        "n|sch|public",
+        "n|enum|public.letter_status"
+      ]
+    }
+  ],
+  "ddl": [
+    {
+      "schema": "public",
+      "name": "letters",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "letter_status",
+      "values": [
+        "pending",
+        "approved",
+        "declined"
+      ],
+      "entityType": "enums"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "byDefault",
+        "name": "letters_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "message",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "sender_email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "status",
+      "type": "letter_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'pending'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "letters",
+      "name": "letters_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    }
+  ]
+}

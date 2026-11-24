@@ -1,0 +1,565 @@
+{
+  "type": "diff",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "9bd49872-18b3-4793-b00f-0c4383fda667",
+  "prevIds": [
+    "cc05878a-6a93-4b83-b363-9b0fca9f9c90"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_role",
+      "statementTarget": [
+        "role",
+        "yakap_app"
+      ],
+      "writes": [
+        "s|role|yakap_app",
+        "n|role|yakap_app",
+        "e|role|yakap_app"
+      ]
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|rls|public.letters"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public"
+      ],
+      "sqlHash": "8e76275f310fef1f"
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "account"
+      ],
+      "writes": [
+        "s|rls|public.account"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public"
+      ],
+      "sqlHash": "294c07288ed1df94"
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "session"
+      ],
+      "writes": [
+        "s|rls|public.session"
+      ],
+      "reads": [
+        "n|tbl|public.session",
+        "n|sch|public"
+      ],
+      "sqlHash": "ab6249085fb7576a"
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "user"
+      ],
+      "writes": [
+        "s|rls|public.user"
+      ],
+      "reads": [
+        "n|tbl|public.user",
+        "n|sch|public"
+      ],
+      "sqlHash": "bf29a0a64eff32e6"
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "verification"
+      ],
+      "writes": [
+        "s|rls|public.verification"
+      ],
+      "reads": [
+        "n|tbl|public.verification",
+        "n|sch|public"
+      ],
+      "sqlHash": "1897ca4d7c053716"
+    },
+    {
+      "statementType": "alter_rls",
+      "statementTarget": [
+        "table",
+        "public",
+        "moderators"
+      ],
+      "writes": [
+        "s|rls|public.moderators"
+      ],
+      "reads": [
+        "n|tbl|public.moderators",
+        "n|sch|public"
+      ],
+      "sqlHash": "191a9ecd5c632054"
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "account"
+      ],
+      "writes": [
+        "s|pol|public.account.auth_scope",
+        "n|pol|public.account.auth_scope",
+        "e|pol|public.account.auth_scope"
+      ],
+      "reads": [
+        "n|tbl|public.account",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.account"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "session"
+      ],
+      "writes": [
+        "s|pol|public.session.auth_scope",
+        "n|pol|public.session.auth_scope",
+        "e|pol|public.session.auth_scope"
+      ],
+      "reads": [
+        "n|tbl|public.session",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.session"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "user"
+      ],
+      "writes": [
+        "s|pol|public.user.auth_scope",
+        "n|pol|public.user.auth_scope",
+        "e|pol|public.user.auth_scope"
+      ],
+      "reads": [
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.user"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "user"
+      ],
+      "writes": [
+        "s|pol|public.user.scoped_profiles",
+        "n|pol|public.user.scoped_profiles",
+        "e|pol|public.user.scoped_profiles"
+      ],
+      "reads": [
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.user"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "verification"
+      ],
+      "writes": [
+        "s|pol|public.verification.auth_scope",
+        "n|pol|public.verification.auth_scope",
+        "e|pol|public.verification.auth_scope"
+      ],
+      "reads": [
+        "n|tbl|public.verification",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.verification"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "moderators"
+      ],
+      "writes": [
+        "s|pol|public.moderators.read_memberships",
+        "n|pol|public.moderators.read_memberships",
+        "e|pol|public.moderators.read_memberships"
+      ],
+      "reads": [
+        "n|tbl|public.moderators",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.moderators"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "moderators"
+      ],
+      "writes": [
+        "s|pol|public.moderators.add_membership",
+        "n|pol|public.moderators.add_membership",
+        "e|pol|public.moderators.add_membership"
+      ],
+      "reads": [
+        "n|tbl|public.moderators",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.moderators"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "moderators"
+      ],
+      "writes": [
+        "s|pol|public.moderators.remove_other_membership",
+        "n|pol|public.moderators.remove_other_membership",
+        "e|pol|public.moderators.remove_other_membership"
+      ],
+      "reads": [
+        "n|tbl|public.moderators",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.moderators"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|pol|public.letters.read_visible_letters",
+        "n|pol|public.letters.read_visible_letters",
+        "e|pol|public.letters.read_visible_letters"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.letters"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|pol|public.letters.submit_own_pending_letter",
+        "n|pol|public.letters.submit_own_pending_letter",
+        "e|pol|public.letters.submit_own_pending_letter"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.letters"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "letters"
+      ],
+      "writes": [
+        "s|pol|public.letters.moderate_letters",
+        "n|pol|public.letters.moderate_letters",
+        "e|pol|public.letters.moderate_letters"
+      ],
+      "reads": [
+        "n|tbl|public.letters",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.letters"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "name": "yakap_app",
+        "superuser": false,
+        "createDb": false,
+        "createRole": false,
+        "inherit": true,
+        "canLogin": false,
+        "replication": false,
+        "bypassRls": false,
+        "connLimit": -1,
+        "password": null,
+        "validUntil": null,
+        "entityType": "roles"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "account",
+        "name": "auth_scope",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'auth'",
+        "withCheck": "current_setting('yakap.scope', true) = 'auth'",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "session",
+        "name": "auth_scope",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'auth'",
+        "withCheck": "current_setting('yakap.scope', true) = 'auth'",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "auth_scope",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'auth'",
+        "withCheck": "current_setting('yakap.scope', true) = 'auth'",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "user",
+        "name": "scoped_profiles",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "\"user\".\"email_verified\" AND (\n      \n  current_setting('yakap.scope', true) = 'moderation' AND EXISTS (\n    SELECT 1 FROM public.moderators WHERE email = current_setting('yakap.actor_email', true)\n  )\n OR\n      (current_setting('yakap.scope', true) = 'submission' AND \"user\".\"id\" = current_setting('yakap.actor_id', true) AND \"user\".\"email\" = current_setting('yakap.actor_email', true))\n    )",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "verification",
+        "name": "auth_scope",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'auth'",
+        "withCheck": "current_setting('yakap.scope', true) = 'auth'",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "moderators",
+        "name": "read_memberships",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) IN ('bootstrap', 'manage-moderators') OR (\n      current_setting('yakap.scope', true) IN ('membership', 'moderation') AND \"moderators\".\"email\" = current_setting('yakap.actor_email', true)\n    )",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "moderators",
+        "name": "add_membership",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": null,
+        "withCheck": "current_setting('yakap.scope', true) IN ('bootstrap', 'manage-moderators')",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "moderators",
+        "name": "remove_other_membership",
+        "as": "PERMISSIVE",
+        "for": "DELETE",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'manage-moderators' AND \"moderators\".\"email\" <> current_setting('yakap.actor_email', true)",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "read_visible_letters",
+        "as": "PERMISSIVE",
+        "for": "SELECT",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "(current_setting('yakap.scope', true) = 'public' AND \"letters\".\"status\" = 'approved') OR (current_setting('yakap.scope', true) = 'submission' AND \"letters\".\"sender_id\" = current_setting('yakap.actor_id', true) AND \"letters\".\"sender_email\" = current_setting('yakap.actor_email', true)) OR (\n  current_setting('yakap.scope', true) = 'moderation' AND EXISTS (\n    SELECT 1 FROM public.moderators WHERE email = current_setting('yakap.actor_email', true)\n  )\n)",
+        "withCheck": null,
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "submit_own_pending_letter",
+        "as": "PERMISSIVE",
+        "for": "INSERT",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": null,
+        "withCheck": "(current_setting('yakap.scope', true) = 'submission' AND \"letters\".\"sender_id\" = current_setting('yakap.actor_id', true) AND \"letters\".\"sender_email\" = current_setting('yakap.actor_email', true)) AND \"letters\".\"status\" = 'pending' AND EXISTS (\n        SELECT 1 FROM public.\"user\" WHERE id = current_setting('yakap.actor_id', true) AND email = current_setting('yakap.actor_email', true) AND email_verified\n      )",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "letters",
+        "name": "moderate_letters",
+        "as": "PERMISSIVE",
+        "for": "UPDATE",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "(\n  current_setting('yakap.scope', true) = 'moderation' AND EXISTS (\n    SELECT 1 FROM public.moderators WHERE email = current_setting('yakap.actor_email', true)\n  )\n) AND \"letters\".\"status\" <> 'deleted'",
+        "withCheck": "(\n  current_setting('yakap.scope', true) = 'moderation' AND EXISTS (\n    SELECT 1 FROM public.moderators WHERE email = current_setting('yakap.actor_email', true)\n  )\n) AND \"letters\".\"status\" IN ('approved', 'declined', 'deleted')",
+        "entityType": "policies"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"letters\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"account\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"session\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"user\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"verification\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    },
+    {
+      "op": "alter",
+      "key": "tables\u0000[\"public\",\"moderators\"]",
+      "set": {
+        "isRlsEnabled": true
+      }
+    }
+  ]
+}
