@@ -1,0 +1,1 @@
+ALTER TYPE "letter_status" ADD VALUE 'deleted';
