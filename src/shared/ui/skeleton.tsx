@@ -6,7 +6,8 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("rounded-sm bg-foreground/15", className)}
+      data-slot="skeleton"
+      className={cn("rounded-md bg-foreground/20 motion-safe:animate-pulse", className)}
       {...props}
     />
   )
