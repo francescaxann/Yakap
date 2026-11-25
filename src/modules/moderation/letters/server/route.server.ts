@@ -1,4 +1,5 @@
 import { z } from '@/shared/validation'
+import { enforceRequestLimit } from '@/shared/http/rate-limit.server'
 import { json, noContent, readJson, RequestError, respond, validate } from '@/shared/http/route.server'
 import { requireModerator } from '../../server/access.server'
 import { reviewSchema } from '../validation/model'
@@ -9,6 +10,7 @@ type LetterRoute = { params: Promise<{ id: string }> }
 
 export function getModerationQueue(request: Request) {
   return respond(async () => {
+    await enforceRequestLimit('readModeration', request.headers)
     const moderator = await requireModerator(request)
     const letters = await listPendingLetters(moderator.email)
     if (letters === null) throw new RequestError(403, 'Moderator access is required.')
@@ -18,6 +20,7 @@ export function getModerationQueue(request: Request) {
 
 export function changeLetterStatus(request: Request, { params }: LetterRoute) {
   return respond(async () => {
+    await enforceRequestLimit('reviewLetters', request.headers)
     const moderator = await requireModerator(request)
     const id = validate(idSchema, (await params).id, 404, 'Letter not found.')
     const { status } = await readJson(request, reviewSchema, 'Choose approved or declined.')
@@ -30,6 +33,7 @@ export function changeLetterStatus(request: Request, { params }: LetterRoute) {
 
 export function removeLetter(request: Request, { params }: LetterRoute) {
   return respond(async () => {
+    await enforceRequestLimit('reviewLetters', request.headers)
     const moderator = await requireModerator(request)
     const id = validate(idSchema, (await params).id, 404, 'Letter not found.')
     const deleted = await deleteLetter(moderator.email, id)
