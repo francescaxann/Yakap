@@ -8,6 +8,7 @@ export default defineConfig({
   dialect: 'postgresql',
   schema: [
     './src/shared/rls.ts',
+    './src/shared/http/rate-limit-schema.server.ts',
     './src/modules/auth/server/schema.server.ts',
     './src/modules/moderation/moderators/server/schema.server.ts',
     './src/modules/letters/server/schema.server.ts',

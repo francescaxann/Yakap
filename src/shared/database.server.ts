@@ -7,21 +7,22 @@ import { z } from '@/shared/validation'
 function createDatabase(connectionString: string) {
   const pool = new pg.Pool({
     connectionString,
-    connectionTimeoutMillis: 10_000,
+    max: 5,
+    connectionTimeoutMillis: 5_000,
     enableChannelBinding: true,
     allowExitOnIdle: true,
   })
   pool.on('error', () => console.error('An idle PostgreSQL connection failed.'))
-  return drizzle({ client: pool, paramsInErrors: false })
+  return { pool, db: drizzle({ client: pool, paramsInErrors: false }) }
 }
 
 const databaseUrl = z.url({ protocol: /^postgres(?:ql)?$/ }).safeParse(process.env.DATABASE_URL).data
 let database: ReturnType<typeof createDatabase> | undefined
 
-export type Database = Parameters<Parameters<NonNullable<typeof database>['transaction']>[0]>[0]
+export type Database = Parameters<Parameters<ReturnType<typeof createDatabase>['db']['transaction']>[0]>[0]
 
 type Access =
-  | { scope: 'auth' | 'public' | 'bootstrap' }
+  | { scope: 'auth' | 'public' | 'bootstrap' | 'rate-limit' }
   | { scope: 'membership' | 'moderation' | 'manage-moderators'; email: string }
   | { scope: 'submission'; email: string; userId: string }
 
@@ -33,7 +34,8 @@ export function hasDatabase() {
 
 export async function withDatabaseAccess<T>(access: Access, run: (db: Database) => Promise<T>) {
   if (!databaseUrl) throw new DatabaseUnavailableError()
-  const db = (database ??= createDatabase(databaseUrl))
+  const { db, pool } = (database ??= createDatabase(databaseUrl))
+  if (pool.waitingCount >= 25) throw new DatabaseUnavailableError()
   const accessMode = access.scope === 'public' || access.scope === 'membership' ? 'read only' : 'read write'
 
   return db.transaction(async (tx) => {
@@ -44,7 +46,10 @@ export async function withDatabaseAccess<T>(access: Access, run: (db: Database) 
     await tx.execute(sql`
       SELECT set_config('yakap.scope', ${access.scope}, true),
              set_config('yakap.actor_email', ${email}, true),
-             set_config('yakap.actor_id', ${userId}, true)
+             set_config('yakap.actor_id', ${userId}, true),
+             set_config('statement_timeout', '8000', true),
+             set_config('lock_timeout', '2000', true),
+             set_config('idle_in_transaction_session_timeout', '30000', true)
     `)
     return run(tx)
   }, { isolationLevel: 'read committed', accessMode })
