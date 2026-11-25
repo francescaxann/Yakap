@@ -70,6 +70,7 @@ A verified DLSU Google Workspace account is required to submit a letter. Moderat
    | `BETTER_AUTH_SECRET` | Random signing secret. Generate one with `openssl rand -base64 32`. |
    | `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` | Google OAuth web client credentials |
    | `YAKAP_MODERATOR_EMAILS` | Initial comma-separated DLSU emails for a fresh database. Optional once the `moderators` table has entries. |
+   | `YAKAP_RATE_LIMIT_IP_HEADER` | Optional header containing one client IP. Set it only if your ingress overwrites it on every request and clients cannot reach the app directly. |
 
 3. Apply the migrations as the database administrator.
 
@@ -136,6 +137,27 @@ drizzle/postgres/              Versioned PostgreSQL migrations
 Yakap runs as one Next.js app. Features group UI in `components/`, server-only work in `server/`, input schemas in `validation/`, and TypeScript contracts in `types/` where needed. Shared modules hold code used across features. Security headers are configured in `next.config.ts`, with the per-document CSP nonce generated in `src/proxy.ts`.
 
 PostgreSQL row-level policies apply inside the app's transactions. Public reads see approved letters, submissions use the verified session's sender identity, and moderator access is checked against database membership. Better Auth uses a separate transaction scope for account and session data. Keep the administrator connection for migrations and use the restricted login for every deployed app instance.
+
+### Request limits
+
+Apply the rate-limit migration before deploying this version. All API operations share PostgreSQL counters across app instances. A request over its quota receives HTTP 429 with `Retry-After` in seconds. If the app cannot reach the counters, it returns HTTP 503.
+
+| Operation | Site-wide quota | Quota per trusted client network |
+| --- | --- | --- |
+| Read public letters | 600 per minute | 60 per minute |
+| Submit letters | 120 per minute | 20 per minute |
+| Read the moderation queue | 300 per minute | 60 per minute |
+| Approve, decline, or delete letters | 180 per minute | 30 per minute |
+| Add or remove moderators | 120 per minute | 20 per minute |
+| Start sign-in | 30 per 10 seconds | 3 per 10 seconds |
+| OAuth callback | 180 per minute | 30 per minute |
+| Check an auth session | 900 per minute | 100 per minute |
+| Sign out | 180 per minute | 30 per minute |
+| Other auth requests | 240 per minute | 30 per minute |
+
+Each verified sender can also submit up to five letters per ten minutes. The optional ingress header enables network quotas for IPv4 addresses and IPv6 /64 networks. The app stores keyed hashes for network counters and uses site-wide quotas when the header is unavailable.
+
+Each app process opens up to five database connections and queues up to 25 waiting transactions. The database enforces eight-second statement, two-second lock, and 30-second idle transaction timeouts for app transactions.
 
 ## Contributing
 
