@@ -1,3 +1,4 @@
+import { enforceRequestLimit } from '@/shared/http/rate-limit.server'
 import { noContent, readJson, RequestError, respond } from '@/shared/http/route.server'
 import { requireModerator } from '../../server/access.server'
 import { moderatorInputError, moderatorInputSchema } from '../validation/model'
@@ -5,6 +6,7 @@ import { updateModerator } from './store.server'
 
 export function changeModerators(request: Request) {
   return respond(async () => {
+    await enforceRequestLimit('manageModerators', request.headers)
     const actor = await requireModerator(request)
     const { email } = await readJson(request, moderatorInputSchema, moderatorInputError)
     const result = await updateModerator(actor.email.toLowerCase(), email, request.method === 'POST' ? 'add' : 'remove')

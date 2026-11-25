@@ -46,7 +46,7 @@ function createAuth(config: NonNullable<typeof authConfig>, db: Database) {
       updateAge: 60 * 60 * 24,
       cookieCache: { enabled: false },
     },
-    rateLimit: { enabled: true, window: 60, max: 100 },
+    rateLimit: { enabled: false }, // The auth route checks the shared PostgreSQL limiter.
     advanced: {
       disableCSRFCheck: false,
       disableOriginCheck: false,

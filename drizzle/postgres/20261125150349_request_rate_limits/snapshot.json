@@ -1,0 +1,180 @@
+{
+  "type": "diff",
+  "version": "10",
+  "dialect": "postgres",
+  "id": "39db7793-6e6d-4cad-89cd-ff50a4060d1c",
+  "prevIds": [
+    "9bd49872-18b3-4793-b00f-0c4383fda667"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "rate_limit_buckets"
+      ],
+      "writes": [
+        "s|tbl|public.rate_limit_buckets",
+        "n|tbl|public.rate_limit_buckets",
+        "e|tbl|public.rate_limit_buckets",
+        "n|rel|public.rate_limit_buckets",
+        "n|type|public.rate_limit_buckets",
+        "n|rel|public.rate_limit_buckets_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "rate_limit_buckets",
+        "rate_limit_buckets_expires_at_idx"
+      ],
+      "writes": [
+        "s|idx|public.rate_limit_buckets_expires_at_idx",
+        "n|idx|public.rate_limit_buckets_expires_at_idx",
+        "e|idx|public.rate_limit_buckets_expires_at_idx",
+        "n|rel|public.rate_limit_buckets_expires_at_idx"
+      ],
+      "reads": [
+        "n|tbl|public.rate_limit_buckets",
+        "n|sch|public",
+        "n|col|public.rate_limit_buckets.expires_at"
+      ]
+    },
+    {
+      "statementType": "create_policy",
+      "statementTarget": [
+        "table",
+        "public",
+        "rate_limit_buckets"
+      ],
+      "writes": [
+        "s|pol|public.rate_limit_buckets.rate_limit_scope",
+        "n|pol|public.rate_limit_buckets.rate_limit_scope",
+        "e|pol|public.rate_limit_buckets.rate_limit_scope"
+      ],
+      "reads": [
+        "n|tbl|public.rate_limit_buckets",
+        "n|sch|public",
+        "n|role|yakap_app",
+        "e|rls|public.rate_limit_buckets"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "rate_limit_buckets",
+        "isRlsEnabled": true,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "key",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "hits",
+        "type": "integer",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "expires_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "rate_limit_buckets_expires_at_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "expires_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "rate_limit_buckets_pkey",
+        "columns": [
+          "key"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "rate_limit_buckets",
+        "name": "rate_limit_scope",
+        "as": "PERMISSIVE",
+        "for": "ALL",
+        "roles": [
+          "yakap_app"
+        ],
+        "using": "current_setting('yakap.scope', true) = 'rate-limit'",
+        "withCheck": "current_setting('yakap.scope', true) = 'rate-limit'",
+        "entityType": "policies"
+      }
+    }
+  ]
+}

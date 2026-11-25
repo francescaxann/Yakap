@@ -3,13 +3,15 @@ import type { ZodType } from 'zod'
 import { DatabaseUnavailableError } from '@/shared/database.server'
 
 export class RequestError extends Error {
-  constructor(readonly status: number, message: string) {
+  constructor(readonly status: number, message: string, readonly headers?: HeadersInit) {
     super(message)
   }
 }
 
-export function json(data: unknown, status = 200) {
-  return Response.json(data, { status, headers: { 'Cache-Control': 'no-store' } })
+export function json(data: unknown, status = 200, extraHeaders?: HeadersInit) {
+  const headers = new Headers(extraHeaders)
+  headers.set('Cache-Control', 'no-store')
+  return Response.json(data, { status, headers })
 }
 
 export function noContent() {
@@ -21,7 +23,7 @@ export async function respond(handler: () => Promise<Response>) {
     return await handler()
   } catch (error) {
     if (error instanceof DatabaseUnavailableError) return json({ error: 'The database is unavailable.' }, 503)
-    if (error instanceof RequestError) return json({ error: error.message }, error.status)
+    if (error instanceof RequestError) return json({ error: error.message }, error.status, error.headers)
     console.error('API request failed', error instanceof Error ? error.name : 'Unknown error')
     return json({ error: 'The service could not complete your request.' }, 500)
   }
