@@ -11,7 +11,7 @@ export function proxy(request: NextRequest) {
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${development ? " 'unsafe-eval'" : ''}`,
     "script-src-attr 'none'",
-    `style-src 'self' 'nonce-${nonce}'`,
+    development ? "style-src 'self' 'unsafe-inline'" : `style-src 'self' 'nonce-${nonce}'`,
     "style-src-attr 'none'",
     "img-src 'self' data: blob: https://lh3.googleusercontent.com",
     "font-src 'self'",
