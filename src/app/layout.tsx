@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { connection } from 'next/server'
 import type { ReactNode } from 'react'
+import { AuroraBackground } from '@/shared/ui/AuroraBackground'
 import { ClickButterflies } from '@/shared/ui/ClickButterflies'
 import { DialogNonce } from '@/shared/ui/DialogNonce'
 import { kicker } from '@/shared/ui/SectionHeading'
@@ -25,10 +26,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   await connection()
   return (
     <html lang="en">
-      <body className="bg-muted font-sans text-foreground antialiased [font-synthesis:none]">
+      <body className="bg-[#f6f9ee] font-sans text-foreground antialiased [font-synthesis:none]">
         <DialogNonce />
         <ClickButterflies />
-        <div className="flex min-h-screen flex-col bg-[linear-gradient(135deg,#eff9fc_0%,#dff0f8_50%,#cfe7f3_100%)]">
+        <AuroraBackground />
+        <div className="flex min-h-screen flex-col">
           <a className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:bg-background focus:px-4 focus:py-3" href="#main-content">
             Skip to main content
           </a>
