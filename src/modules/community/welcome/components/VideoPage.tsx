@@ -12,13 +12,11 @@ export function VideoPage() {
       <div>
         <span className={kicker}>01 / A MESSAGE FROM YOUR CSG</span>
         <h2 className={cn(pageTitle, 'mb-5 mt-3.5')}>You matter here.</h2>
-        <p className={cn(lede, 'max-w-[410px]')}>A few familiar faces wanted to leave you a note. Take a moment with them, exactly as you are.</p>
-        {hasVideo && <p className="mt-[35px] font-mono text-[11px] tracking-[.08em] text-muted-foreground"><span className="me-2 inline-block size-[7px] rounded-full bg-primary" aria-hidden="true" />02:14 / CSG OFFICERS</p>}
-      </div>
+        <p className={cn(lede, 'max-w-[410px]')}>A few familiar faces wanted to leave you a note. Take a moment with them, exactly as you are.</p>      </div>
       <Card variant="video" className="-order-1 p-3.5 pb-0 desktop:order-none">
         <CardContent className="[&>*]:aspect-video [&>*]:w-full [&>*]:bg-secondary [&>*]:object-cover">
           {hasVideo ? (
-            <video controls poster="/assets/csg-welcome-poster.svg" aria-label="Welcome from the CSG officers">
+            <video autoPlay muted playsInline controls poster="/assets/csg-welcome-poster.svg" aria-label="Welcome from the CSG officers">
               <source src="/assets/csg-welcome.mp4" type="video/mp4" />
               <track kind="captions" src="/assets/csg-welcome.vtt" srcLang="en" label="English captions" default />
               Your browser does not support HTML5 video.
