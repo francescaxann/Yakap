@@ -9,7 +9,7 @@ const tabs = [
   { href: '/letters', label: 'Letters of hope' },
   { href: '/cookie', label: 'CSG Bot cookie' },
   { href: '/resources', label: 'Resources' },
-  { href: '/cosca', label: 'COSCA donation drive' },
+  { href: '/cosca', label: 'Donation drive' },
 ]
 
 export function SiteNav() {

@@ -15,6 +15,13 @@ export default {
           '100%': { transform: 'rotate(-4deg)' },
         },
         twinkle: { '50%': { transform: 'translateY(-5px) rotate(12deg) scale(1.12)' } },
+        'butterfly-fly': {
+          '0%': { opacity: '0', transform: 'translate(0, 0) scale(.5) rotate(0)' },
+          '15%': { opacity: '1' },
+          '60%': { opacity: '1' },
+          '100%': { opacity: '0', transform: 'translate(var(--butterfly-drift, 0px), -130px) scale(1) rotate(calc(var(--butterfly-drift, 0px) * .3))' },
+        },
+        'butterfly-flap': { from: { transform: 'scaleX(1)' }, to: { transform: 'scaleX(.35)' } },
         'confirmation-overlay': { from: { opacity: '0' }, to: { opacity: '1' } },
         'confirmation-enter': {
           from: { opacity: '0', transform: 'translate(-50%, calc(-50% + 0.375rem)) scale(0.97)' },
@@ -25,6 +32,8 @@ export default {
         'bot-bounce': 'bot-bounce .7s ease-in-out 2',
         'cookie-pop': 'cookie-pop .55s ease-out',
         twinkle: 'twinkle 1.8s ease-in-out .6s 2',
+        'butterfly-fly': 'butterfly-fly 1.8s ease-out forwards',
+        'butterfly-flap': 'butterfly-flap .2s ease-in-out infinite alternate',
         'confirmation-overlay': 'confirmation-overlay 150ms ease-out',
         'confirmation-enter': 'confirmation-enter 180ms ease-out',
       },

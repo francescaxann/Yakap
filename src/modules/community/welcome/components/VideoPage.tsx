@@ -12,9 +12,7 @@ export function VideoPage() {
       <div>
         <span className={kicker}>01 / A MESSAGE FROM YOUR CSG</span>
         <h2 className={cn(pageTitle, 'mb-5 mt-3.5')}>You matter here.</h2>
-        <p className={cn(lede, 'max-w-[410px]')}>A few familiar faces wanted to leave you a note. Take a moment with them, exactly as you are.</p>
-        {hasVideo && <p className="mt-[35px] font-mono text-[11px] tracking-[.08em] text-muted-foreground"><span className="me-2 inline-block size-[7px] rounded-full bg-primary" aria-hidden="true" />02:14 / CSG OFFICERS</p>}
-      </div>
+        <p className={cn(lede, 'max-w-[410px]')}>A few familiar faces wanted to leave you a note. Take a moment with them, exactly as you are.</p>      </div>
       <Card variant="video" className="-order-1 p-3.5 pb-0 desktop:order-none">
         <CardContent className="[&>*]:aspect-video [&>*]:w-full [&>*]:bg-secondary [&>*]:object-cover">
           {hasVideo ? (
