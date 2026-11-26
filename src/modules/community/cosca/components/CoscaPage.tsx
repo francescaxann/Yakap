@@ -21,6 +21,7 @@ export function CoscaPage() {
               width={1080}
               height={1080}
               autoPlay
+              muted
               controls
               playsInline
               preload="auto"

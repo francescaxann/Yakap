@@ -16,7 +16,7 @@ export function VideoPage() {
       <Card variant="video" className="-order-1 p-3.5 pb-0 desktop:order-none">
         <CardContent className="[&>*]:aspect-video [&>*]:w-full [&>*]:bg-secondary [&>*]:object-cover">
           {hasVideo ? (
-            <video controls poster="/assets/csg-welcome-poster.svg" aria-label="Welcome from the CSG officers">
+            <video autoPlay muted playsInline controls poster="/assets/csg-welcome-poster.svg" aria-label="Welcome from the CSG officers">
               <source src="/assets/csg-welcome.mp4" type="video/mp4" />
               <track kind="captions" src="/assets/csg-welcome.vtt" srcLang="en" label="English captions" default />
               Your browser does not support HTML5 video.
