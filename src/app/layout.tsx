@@ -36,7 +36,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
           </a>
           <header className={cn(shellWidth, 'flex items-center justify-between gap-2 pb-[18px] pt-7 font-mono text-xs uppercase tracking-[.08em] text-muted-foreground')}>
             <Link className="flex min-h-7 items-center gap-2.5 text-foreground" href="/video" aria-label="CSG wellbeing home">
-              <span className="grid size-[22px] place-items-center rounded-full bg-link text-[17px] text-white" aria-hidden="true">+</span>
+              <span className="flex items-center gap-1.5 rounded-full bg-link px-2.5 py-1" aria-hidden="true">
+                <img src="/assets/usg-logo.webp" alt="" width={76} height={96} className="h-6 w-auto opacity-80" />
+                <img src="/assets/csg-logo.webp" alt="" width={78} height={96} className="h-6 w-auto opacity-80" />
+              </span>
               <span>CSG / <b className="font-medium text-link">wellbeing</b></span>
             </Link>
             <span className="hidden desktop:inline">a little space to breathe</span>
